@@ -77,6 +77,15 @@ a {
   font-size: 100%;
   overflow: auto;
 }
+.modal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.39);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .modal form {
   background-color: #888888;
   padding: 16px;
@@ -100,4 +109,8 @@ a {
 }
 .modal form fieldset input:focus-within {
   border: none;
+}
+
+.hide {
+  display: none;
 }/*# sourceMappingURL=styles.css.map */
