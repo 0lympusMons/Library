@@ -3,32 +3,40 @@ let modal = document.querySelector(".modal");
 
 
 addBookButton.addEventListener('click', () => {
-    modal.classList.toggle("hide");
-    
-    modal.addEventListener("click", function(e){
-    modal.classList.toggle("hide");
-        e.stopPropagation();
-    })
 
-    function detectEscapeKey(e){
-        if(e.key == "Escape"){
-            modal.classList.toggle("hide");
-            document.removeEventListener("keydown", detectEscapeKey);
-        }
-    }
-
-
-
+    openAddBookModal();
     document.addEventListener("keydown", detectEscapeKey);
 
-
-    // document.removeEventListener('keydown', detectEscapeKey);
 });
+
+modal.addEventListener("click", (e) => {
+    // e.stopPropagation();
+    modal.classList.add("hide");
+});
+
+function openAddBookModal(){
+    modal.classList.remove("hide");
+
+};
+
+function closeAddBookModal(e) {
+    e.stopPropagation();
+    modal.classList.add("hide");
+
+}
+
+function detectEscapeKey(e) {
+    if (e.key == "Escape") {
+        modal.classList.toggle("hide");
+        document.removeEventListener("keydown", detectEscapeKey);
+    }
+}
 
 
 
 let form = document.querySelector("form");
 form.addEventListener('submit', addBookToLibrary);
+form.addEventListener('click', e => e.stopPropagation());
 
 
 
@@ -43,13 +51,13 @@ function Book(title, author, pages, readStatus) {
 
 function addBookToLibrary() {
 
-const data = new FormData(form);
+    const data = new FormData(form);
 
     //getting form values
     let bookTitle = data.get("bookTitle");
     let authorName = data.get("bookAuthor");
     let bookPages = data.get("bookPages");
-    let readStatus = (data.get("readStatus") == "on")? "Read" : "Not yet read";
+    let readStatus = (data.get("readStatus") == "on") ? "Read" : "Not yet read";
 
     //creating new book object
     let newBook = new Book(bookTitle, authorName, bookPages, readStatus);
@@ -57,7 +65,7 @@ const data = new FormData(form);
 
     //appending child node in the DOM
     let bookCard = document.createElement('div');
-    
+
     let bookCardContent = `<div class="book__card--title">${bookTitle}</div>
     <div class="book__card--author">${authorName}</div>
     <div class="book__card--pages">${bookPages} pages</div>
@@ -83,13 +91,13 @@ const data = new FormData(form);
 
 }
 
-function readEventListener(){
+function readEventListener() {
     let readButtons = document.querySelectorAll(".book__card--read_statusButton");
     readButtons.forEach(button => button.addEventListener('click', toggleRead));
 }
 
-function toggleRead(e){
-    e.target.innerText = (e.target.innerText == "Read")? "Not yet read" : "Read";
+function toggleRead(e) {
+    e.target.innerText = (e.target.innerText == "Read") ? "Not yet read" : "Read";
     let readStatus = e.target.innerText;
 
     let bookTitle = e.target.parentNode.parentNode.querySelector(".book__card--title").innerText;
@@ -97,25 +105,25 @@ function toggleRead(e){
 
 
     myLibrary.forEach((book, index) => {
-        if(book.title == bookTitle){
+        if (book.title == bookTitle) {
             book.readStatus = readStatus;
         }
     });
 }
 
 
-function removeEventListener (){
+function removeEventListener() {
     let removeBookButton = document.querySelectorAll(".removeBook");
     removeBookButton.forEach(button => button.addEventListener('click', removeBook));
 
-    function removeBook(e){
+    function removeBook(e) {
         let bookTitle = e.target.parentNode.parentNode.querySelector(".book__card--title").innerText;
         console.log(bookTitle);
 
 
         myLibrary.forEach((book, index) => {
-            if(book.title == bookTitle)
-            myLibrary.splice(index, 1);
+            if (book.title == bookTitle)
+                myLibrary.splice(index, 1);
         });
         e.target.parentNode.parentNode.remove();
 
