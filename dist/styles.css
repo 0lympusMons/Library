@@ -81,6 +81,21 @@ a {
   font-size: 100%;
   overflow: auto;
 }
+.books__wrapper .book__card--read_status {
+  width: 100%;
+}
+.books__wrapper .book__card--read_status button {
+  height: 25px;
+  width: 100%;
+}
+.books__wrapper .book__card--remove {
+  width: 100%;
+}
+.books__wrapper .book__card--remove button {
+  height: 25px;
+  width: 100%;
+}
+
 .modal {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.39);
