@@ -33,6 +33,7 @@ const data = new FormData(form);
 
     //creating new book object
     let newBook = new Book(bookTitle, authorName, bookPages, readStatus);
+    myLibrary.push(newBook);
 
     //appending child node in the DOM
     let bookCard = document.createElement('div');
@@ -41,7 +42,7 @@ const data = new FormData(form);
     <div class="book__card--author">${authorName}</div>
     <div class="book__card--pages">${bookPages} pages</div>
     <div class="book__card--read_status"><button class="book__card--read_statusButton">${readStatus}</button></div>
-    <div class="book__card--remove"><button >Remove</button></div>`;
+    <div class="book__card--remove"><button class="removeBook">Remove</button></div>`;
 
     //styling child node
     bookCard.classList.add('book__card');
@@ -53,6 +54,9 @@ const data = new FormData(form);
 
     //showing modal
     modal.classList.toggle("hide");
+
+    //attaching event listeners to new buttons
+    removeEventListener();
     readEventListener();
 
     return newBook;
@@ -61,15 +65,48 @@ const data = new FormData(form);
 
 function readEventListener(){
     let readButtons = document.querySelectorAll(".book__card--read_statusButton");
-    readButtons.forEach(function(button){button.addEventListener('click', toggleRead);
-    });
+    readButtons.forEach(button => button.addEventListener('click', toggleRead));
 }
 
 function toggleRead(e){
     e.target.innerText = (e.target.innerText == "Read")? "Not yet read" : "Read";
+    let readStatus = e.target.innerText;
+
+    let bookTitle = e.target.parentNode.parentNode.querySelector(".book__card--title").innerText;
+    console.log(bookTitle);
+
+
+    myLibrary.forEach((book, index) => {
+        if(book.title == bookTitle){
+            book.readStatus = readStatus;
+        }
+    });
 }
 
+
+function removeEventListener (){
+    let removeBookButton = document.querySelectorAll(".removeBook");
+    removeBookButton.forEach(button => button.addEventListener('click', removeBook));
+
+    function removeBook(e){
+        let bookTitle = e.target.parentNode.parentNode.querySelector(".book__card--title").innerText;
+        console.log(bookTitle);
+
+
+        myLibrary.forEach((book, index) => {
+            if(book.title == bookTitle)
+            myLibrary.splice(index, 1);
+        });
+        e.target.parentNode.parentNode.remove();
+
+    }
+
+    //remove from array
+}
+
+
 readEventListener();
+removeEventListener();
 
 
 
