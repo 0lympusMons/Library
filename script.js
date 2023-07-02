@@ -4,15 +4,23 @@ let modal = document.querySelector(".modal");
 
 addBookButton.addEventListener('click', () => {
     modal.classList.toggle("hide");
+    
+    modal.addEventListener("click", function(e){
+    modal.classList.toggle("hide");
+        e.stopPropagation();
+    })
 
     function detectEscapeKey(e){
         if(e.key == "Escape"){
             modal.classList.toggle("hide");
-    
+            document.removeEventListener("keydown", detectEscapeKey);
         }
     }
 
-    document.addEventListener("keydown", detectEscapeKey, { once: true });
+
+
+    document.addEventListener("keydown", detectEscapeKey);
+
 
     // document.removeEventListener('keydown', detectEscapeKey);
 });
