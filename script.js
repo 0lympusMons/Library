@@ -1,3 +1,25 @@
+//data structures
+
+let myLibrary = [];
+
+function Book(title, author, pages, readStatus) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.readStatus = readStatus;
+}
+
+function addBookToLibrary(bookTitle, authorName, bookPages, readStatus) {
+
+    let newBook = new Book(bookTitle, authorName, bookPages, readStatus);
+    myLibrary.push(newBook);
+}
+
+
+
+//user interface
+
+
 let addBookButton = document.querySelector(".add-book-button");
 let modal = document.querySelector(".modal");
 
@@ -14,13 +36,12 @@ modal.addEventListener("click", (e) => {
     modal.classList.add("hide");
 });
 
-function openAddBookModal(){
+function openAddBookModal() {
     modal.classList.remove("hide");
 
 };
 
 function closeAddBookModal(e) {
-    e.stopPropagation();
     modal.classList.add("hide");
 
 }
@@ -32,26 +53,9 @@ function detectEscapeKey(e) {
     }
 }
 
+function addBookToDOM() {
 
-
-let form = document.querySelector("form");
-form.addEventListener('submit', addBookToLibrary);
-form.addEventListener('click', e => e.stopPropagation());
-
-
-
-let myLibrary = [];
-
-function Book(title, author, pages, readStatus) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.readStatus = readStatus;
-}
-
-function addBookToLibrary() {
-
-    const data = new FormData(form);
+    let data = new FormData(form);
 
     //getting form values
     let bookTitle = data.get("bookTitle");
@@ -60,8 +64,8 @@ function addBookToLibrary() {
     let readStatus = (data.get("readStatus") == "on") ? "Read" : "Not yet read";
 
     //creating new book object
-    let newBook = new Book(bookTitle, authorName, bookPages, readStatus);
-    myLibrary.push(newBook);
+    addBookToLibrary(bookTitle, authorName, bookPages, readStatus);
+
 
     //appending child node in the DOM
     let bookCard = document.createElement('div');
@@ -80,21 +84,28 @@ function addBookToLibrary() {
     //preventing refresh
     event.preventDefault();
 
-    //showing modal
-    modal.classList.toggle("hide");
+    //closing modal
+    closeAddBookModal();
 
     //attaching event listeners to new buttons
-    removeEventListener();
-    readEventListener();
+    //!! performance issue !!
+    update();
 
-    return newBook;
+
 
 }
+
+
+let form = document.querySelector("form");
+form.addEventListener('submit', addBookToDOM);
+form.addEventListener('click', e => e.stopPropagation());
+
 
 function readEventListener() {
     let readButtons = document.querySelectorAll(".book__card--read_statusButton");
     readButtons.forEach(button => button.addEventListener('click', toggleRead));
 }
+
 
 function toggleRead(e) {
     e.target.innerText = (e.target.innerText == "Read") ? "Not yet read" : "Read";
@@ -112,7 +123,7 @@ function toggleRead(e) {
 }
 
 
-function removeEventListener() {
+function addRemoveEventListener() {
     let removeBookButton = document.querySelectorAll(".removeBook");
     removeBookButton.forEach(button => button.addEventListener('click', removeBook));
 
@@ -120,21 +131,35 @@ function removeEventListener() {
         let bookTitle = e.target.parentNode.parentNode.querySelector(".book__card--title").innerText;
         console.log(bookTitle);
 
-
         myLibrary.forEach((book, index) => {
             if (book.title == bookTitle)
                 myLibrary.splice(index, 1);
         });
         e.target.parentNode.parentNode.remove();
 
+    addIndexToCards();
+
     }
 
     //remove from array
 }
 
+function addIndexToCards(){
+    let bookCards = document.querySelectorAll('.book__card');
+    bookCards.forEach( (card, index) => {
+        card.dataset.index = index;
+    });
+}
 
-readEventListener();
-removeEventListener();
+function update(){
+    addIndexToCards();
+    readEventListener();
+    addRemoveEventListener();
+};
+
+update();
+
+
 
 
 
