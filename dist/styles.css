@@ -35,7 +35,8 @@ header {
 }
 
 footer {
-  margin-top: 64px;
+  margin-top: auto;
+  margin-bottom: 12px;
 }
 
 a {
