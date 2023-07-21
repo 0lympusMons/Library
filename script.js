@@ -2,11 +2,13 @@
 
 let myLibrary = [];
 
-function Book(title, author, pages, readStatus) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.readStatus = readStatus;
+class Book{
+    constructor(title, author, pages, readStatus){
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.readStatus = readStatus;
+    };
 }
 
 function addBookToLibrary(bookTitle, authorName, bookPages, readStatus) {
@@ -16,9 +18,7 @@ function addBookToLibrary(bookTitle, authorName, bookPages, readStatus) {
 }
 
 
-
 //user interface
-
 
 let addBookButton = document.querySelector(".add-book-button");
 let modal = document.querySelector(".modal");
